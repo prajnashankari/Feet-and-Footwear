@@ -1,4 +1,4 @@
-# Foot Size Measurement Project
+# Footwear Suggestion based on Foot Photo Analysis Project
 
 This project measures foot size using image processing techniques. It involves capturing an image of a foot on a reference paper, processing the image to determine foot dimensions, and providing footwear recommendations based on these measurements.
 
