@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feet Measurement Result</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .result-img {
+            max-width: 100%; /* Ensures the image is responsive */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .img-container {
+            margin-left:260px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px; /* Set a fixed height for both image containers */
+            border: 1px solid #dee2e6; /* Optional: adds border around image containers */
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .img-container img {
+            max-height: 90%; /* Ensure the image fits within the container */
+            width: auto; /* Let the image adjust its width */
+            max-width: 100%; /* Ensures the image is responsive */
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .img-container h4 {
+            margin-top: 10px;
+        }
+        .measurements {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .measurements li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .measurements li span {
+            font-weight: bold;
+        }
+        .gender-selection {
+            margin-top: 20px;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1 class="text-center">Feet Measurement Result</h1>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span></span> <!-- Empty span to push the button to the right -->
+                <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
+            </div>
+            <div class="row">
+                <div class="col-md-6 img-container">
+                    <h4>Original Image</h4>
+                    <img src="{{ url_for('uploaded_file', filename=original_image) }}" class="result-img" alt="Original Image">
+                </div>
+            </div>
+            <hr>
+            <h4>Measurements</h4>
+            <ul class="measurements">
+                <li>Feet Size: <span>{{ "%.2f"|format(foot_length_cm) }} cm ({{ "%.2f"|format(foot_length_cm / 2.54) }} inches)</span></li>
+                <li>Breadth at Ball: <span>{{ "%.2f"|format(ball_breadth_cm) }} cm ({{ "%.2f"|format(ball_breadth_cm / 2.54) }} inches)</span></li>
+                <li>Breadth at Bridge: <span>{{ "%.2f"|format(bridge_breadth_cm) }} cm ({{ "%.2f"|format(bridge_breadth_cm / 2.54) }} inches)</span></li>
+                <li>Ball Girth: <span>{{ "%.2f"|format(ball_girth_cm) }} cm ({{ "%.2f"|format(ball_girth_cm / 2.54) }} inches)</span></li>
+                <li>Instep Girth: <span>{{ "%.2f"|format(instep_girth_cm) }} cm ({{ "%.2f"|format(instep_girth_cm / 2.54) }} inches)</span></li>
+            </ul>
+
+            <!-- Gender Selection Form -->
+            <div class="form-group">
+                <label for="gender">Select Gender:</label>
+                <select id="gender" class="form-control">
+                    <option value="---">---</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            <button id="buyNowBtn" type="button" class="btn btn-success btn-block">Buy Now (Zappos)</button>
+            <button id="buyNowBtnamazon" type="button" class="btn btn-success btn-block">Buy Now (Amazon)</button>
+            <button id="buyNowBtnflipkart" type="button" class="btn btn-success btn-block">Buy Now (Flipkart)</button>
+
+            <a href="/" class="btn btn-primary btn-block mt-3">Upload Another Image</a>
+        </div>
+    </div>
+
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        document.getElementById('buyNowBtn').addEventListener('click', function() {
+            const gender = document.getElementById('gender').value;
+            const feetLengthCm = `{{ foot_length_cm|tojson }}`; // Pass the feet length as JSON
+            
+            if (gender === '---') {
+                console.log("Please select gender");
+                alert("Please select gender");
+                return; // Exit the function if gender is not selected
+            }
+            fetch(`/get-url?gender=${gender}&cm=${feetLengthCm}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.url) {
+                        window.location.href = data.url;
+                    } else {
+                        alert('URL not found');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('buyNowBtnamazon').addEventListener('click', function() {
+            const gender = document.getElementById('gender').value;
+            const feetLengthCm = `{{ foot_length_cm|tojson }}`; // Pass the feet length as JSON
+            
+            if (gender === '---') {
+                console.log("Please select gender");
+                alert("Please select gender");
+                return; // Exit the function if gender is not selected
+            }
+            fetch(`/get-urlamazon?gender=${gender}&cm=${feetLengthCm}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.url) {
+                        window.location.href = data.url;
+                    } else {
+                        alert('URL not found');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('buyNowBtnflipkart').addEventListener('click', function() {
+            const gender = document.getElementById('gender').value;
+            const feetLengthCm = `{{ foot_length_cm|tojson }}`; // Pass the feet length as JSON
+            
+            if (gender === '---') {
+                console.log("Please select gender");
+                alert("Please select gender");
+                return; // Exit the function if gender is not selected
+            }
+            fetch(`/get-urlflipkart?gender=${gender}&cm=${feetLengthCm}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.url) {
+                        window.location.href = data.url;
+                    } else {
+                        alert('URL not found');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
