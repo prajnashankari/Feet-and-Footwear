@@ -14,7 +14,7 @@ This project measures foot size using image processing techniques. It involves c
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/foot-size-measurement.git
+    git clone https://github.com/prajnashankarimn/Feet-and-Footwear.git.git
     cd foot-size-measurement
     ```
 
