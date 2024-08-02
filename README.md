@@ -15,7 +15,7 @@ This project measures foot size using image processing techniques. It involves c
 
     ```bash
     git clone https://github.com/prajnashankari/Feet-and-Footwear.git.git
-    cd foot-size-measurement
+    cd Feet-and-Footwear
     ```
 
 2. Create a virtual environment:
