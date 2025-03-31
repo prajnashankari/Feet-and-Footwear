@@ -1,5 +1,8 @@
+pip
+setuptools
+wheel
 Flask==2.0.1
-numpy==1.21.1
+numpy==1.23.5
 opencv-python==4.5.3.56
 scikit-image==0.18.3
 pymongo==3.12.0
